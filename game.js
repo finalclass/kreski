@@ -1,6 +1,6 @@
 const start = (function () {
     const playerColors = ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff', '#fff', '#000'];
-    const controls = ['q', 'z', 'r', 'v', 'u', 'm', ']', '/'];
+    const controls = ['q', '/', 'v', 'u', 'z', 'm', 'r', ']'];
     /** @type {HTMLCanvasElement} */
     const $view = document.querySelector('#view');
     /** @type {CanvasRenderingContext2D} */
