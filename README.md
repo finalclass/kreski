@@ -2,6 +2,8 @@
 
 Old school speedway web implemenation.
 
+![kreski speedway screenshot](./screenshot.png)
+
 ## Start:
 
 ```
@@ -22,3 +24,4 @@ the above command should open a web browser with the game
 - `m` - player 6 turning key
 - `]` - player 7 turning key
 - `/` - player 8 turning key
+

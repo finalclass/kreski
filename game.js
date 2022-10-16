@@ -252,4 +252,4 @@ const start = (function () {
     }
 })();
 
-start(1);
+start(4);
