@@ -4,6 +4,12 @@ Old school speedway web implemenation.
 
 ![kreski speedway screenshot](./screenshot.png)
 
+## Init
+
+```
+npm install
+```
+
 ## Start:
 
 ```
