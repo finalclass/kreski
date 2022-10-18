@@ -13,8 +13,8 @@ const startGame = (function () {
     document.addEventListener('keydown', onKeyDown);
     document.addEventListener('keyup', onKeyUp);
 
-    function trackSizePx(state) {
-        return height / (2 * state.trackSize);
+    function middleEllipseRadius(trackSize) {
+        return height / (2 * trackSize);
     }
 
     function renderTimestamp(ts) {
@@ -34,8 +34,8 @@ const startGame = (function () {
         pressedKeys[event.key.toLowerCase()] = false;
     }
 
-    function initPlayer(size, playerNumber, totalPlayers, trackSize) {
-        const trackHeight = (height - height / trackSize) / 2;
+    function initPlayer(size, playerNumber, totalPlayers, trackSize, speed) {
+        const trackHeight = (height / 2) - middleEllipseRadius(trackSize);
         const gap = trackHeight / (totalPlayers + 1);
         const trackHeightStart = height - trackHeight;
 
@@ -57,8 +57,8 @@ const startGame = (function () {
             head,
             tail: tail.reverse(),
             thickness: 4,
-            speed: 0.5,
-            turnSpeed: 2,
+            speed,
+            turnSpeed: 4 * speed,
             hasCollided: false,
             controlKey: controls[playerNumber],
             direction: 0,
@@ -86,9 +86,10 @@ const startGame = (function () {
         ctx.beginPath();
         ctx.fillStyle = grassColor;
         ctx.ellipse(
-            width / 3, height / 2,
+            width / 3,
+            height / 2,
             width / (3 * state.trackSize) ,
-            trackSizePx(state),
+            middleEllipseRadius(state.trackSize),
             0,
             Math.PI / 2,
             -Math.PI / 2
@@ -103,7 +104,7 @@ const startGame = (function () {
             2 * width / 3,
             height / 2,
             width / (3 * state.trackSize),
-            trackSizePx(state),
+            middleEllipseRadius(state.trackSize),
             0,
             -Math.PI / 2,
             Math.PI / 2
@@ -134,27 +135,37 @@ const startGame = (function () {
     function drawStart(state) {
         ctx.beginPath();
         ctx.strokeStyle = '#999';
-        ctx.moveTo(width / 2, height / 2 + trackSizePx(state));
+        ctx.moveTo(width / 2, height / 2 + middleEllipseRadius(state.trackSize));
         ctx.lineTo(width / 2, height);
         ctx.lineWidth = 4;
         ctx.stroke();
     }
 
     function drawScore(state) {
-        const scoresTop = 1.2 * trackSizePx(state);
+        const scoresTop = (height - middleEllipseRadius(state.trackSize)) / 2.1;
         const scoresLeft = 0.8 * (width / 3);
 
         ctx.beginPath();
         ctx.fillStyle = '#fff';
-        ctx.font = '30px Arial';
+        ctx.font = '30px sans-serif';
         for (let p = 0; p < state.players.length; p += 1) {
             const player = state.players[p];
 
+            ctx.beginPath();
+            ctx.fillStyle = player.color;
+            ctx.rect(scoresLeft, scoresTop + p * 30, 30, 30);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.fillStyle = '#fff';
+            ctx.font = '30px sans-serif';
+            ctx.fillText(
+                player.controlKey,
+                scoresLeft + 40,
+                scoresTop + p * 30 + 25
+            );
+
             if (player.hasCollided || player.hasFinished) {
-                ctx.beginPath();
-                ctx.fillStyle = player.color;
-                ctx.rect(scoresLeft, scoresTop + p * 30, 30, 30);
-                ctx.fill();
 
                 ctx.beginPath();
                 let suffix = 'CRASH';
@@ -172,7 +183,7 @@ const startGame = (function () {
 
                 ctx.fillText(
                     renderTimestamp(player.finishedAt - state.gameStartedAt) + ' ' + suffix,
-                    scoresLeft + 40,
+                    scoresLeft + 60,
                     scoresTop + p * 30 + 25
                 );
                 ctx.fill();
@@ -317,6 +328,7 @@ const startGame = (function () {
                     player.speed = 0;
                     player.hasCollided = true;
                     player.finishedAt = Date.now();
+                    playNote(216, 32)
                 }
 
                 if (player.currentSide === 'left' && player.head.x > width / 2) {
@@ -350,11 +362,11 @@ const startGame = (function () {
             .sort((a, b) => a.finishedAt - b.finishedAt)[0] === player;
     }
 
-    function initialState({ totalPlayers, laps, trackSize }) {
+    function initialState({ totalPlayers, laps, trackSize, speed }) {
         const players = [];
 
         for (let i = 0; i < totalPlayers; i += 1) {
-            players.push(initPlayer(width / 140, i, totalPlayers, trackSize));
+            players.push(initPlayer(width / 140, i, totalPlayers, trackSize, speed));
         }
 
         return {
@@ -368,7 +380,8 @@ const startGame = (function () {
             countingThreePassed: false,
             players,
             gameStartedAt: 0,
-            gameFinishedAt: 0
+            gameFinishedAt: 0,
+            speed
         };
     }
 
@@ -384,4 +397,4 @@ const startGame = (function () {
     }
 })();
 
-startGame({ totalPlayers: 4, laps: 2, trackSize: 2 });
+// startGame({ totalPlayers: 4, laps: 2, trackSize: 2 });
