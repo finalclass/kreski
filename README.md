@@ -4,6 +4,10 @@ Old school speedway web implemenation.
 
 ![kreski speedway screenshot](./screenshot.png)
 
+## Play
+
+Visit: [](https://finalclass.github.io/kreski/)
+
 ## Init
 
 ```
