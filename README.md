@@ -6,7 +6,7 @@ Old school speedway web implemenation.
 
 ## Play
 
-Visit: [](https://finalclass.github.io/kreski/)
+Visit: https://finalclass.github.io/kreski/
 
 ## Init
 
