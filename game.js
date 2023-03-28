@@ -1,5 +1,5 @@
 const startGame = (function () {
-    const playerColors = ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff', '#fff', '#000'];
+    const playerColors = ['#f00', '#0f0', '#99f', '#ff0', '#f0f', '#0ff', '#fff', '#000'];
     const controls = ['q', '/', 'v', 'u', 'z', 'm', 'r', ']'];
     /** @type {HTMLCanvasElement} */
     const $view = document.querySelector('#view');
